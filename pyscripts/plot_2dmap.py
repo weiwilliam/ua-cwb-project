@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+#
 # @author: Shih-Wei Wei
 #
 import sys, os, platform
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import xarray as xa
@@ -28,10 +30,17 @@ axe_w=6; axe_h=4
 quality=300
 minussign=u'\u2212'
 
-rootpath='/nwpr/gfs/xa30/data'
-rootdms=rootpath+'/dmsdb'
+# Setup the path of dmsdb and output sub-folder name
+rootdms='/nwpr/gfs/xa30/data/dmsdb'
 savedir='debug'
 
+# Default folder is "images" in repo, modify it accordingly
+imagesdir=str((Path(__file__).parent/'..').resolve())
+outputpath=imagesdir+'/images/2dmap/'+savedir
+if ( not os.path.exists(outputpath) ):
+    os.makedirs(outputpath)
+
+# Setup the experiment .ufs folder
 expufs=['TCo383L72.ufs','TCo383L72DG.ufs']
 expdms=['NAER','NAER']
 exp_nm=['Ctrl','TestDG']
@@ -48,15 +57,12 @@ cycint=6
 fhmax=24
 fhint=6
 
+# Setup the plotting variable, it will find the longname definition in pylibs
 pltvar='S00310'
 cblb=find_dms_longname(pltvar)
 area='Glb'
 pltave=0 # 0: single cycle only 1: time average
 tkfreq=1
-
-outputpath=rootpath+'/Images/2dmap/'+savedir
-if ( not os.path.exists(outputpath) ):
-    os.makedirs(outputpath)
 
 fhrlist=list(np.arange(0,fhmax+.1,fhint))
 if pltvar[:3]=='S00':
@@ -86,6 +92,7 @@ date2=pd.to_datetime(edate,format="%Y%m%d%H")
 delta = timedelta(hours=cycint)
 dates = pd.date_range(start=date1, end=date2, freq=delta)
 
+# Define lat/lon of the Gaussian grid based on jcap number
 lat,lon=define_latlon(jcap=383)
 lon=(lon+180)%360-180
 
