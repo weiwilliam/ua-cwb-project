@@ -42,9 +42,12 @@ if ( not os.path.exists(outputpath) ):
 
 # Setup the experiment .ufs folder
 expufs=['TCo383L72.ufs','TCo383L72DG.ufs']
+# Setup the 4-digit tag of the DMS
 expdms=['NAER','NAER']
-exp_nm=['Ctrl','TestDG']
+# Setup the jcap for lat/lon definition
 expjcap=[383,383]
+# Setup the label name using in figures
+exp_nm=['Ctrl','TestDG']
 
 dmstag='GIMG'
 if dmstag=='GIMG':
@@ -61,7 +64,7 @@ fhint=6
 pltvar='S00310'
 cblb=find_dms_longname(pltvar)
 area='Glb'
-pltave=0 # 0: single cycle only 1: time average
+pltave=0 # 0: single cycle only; 1: time average
 tkfreq=1
 
 fhrlist=list(np.arange(0,fhmax+.1,fhint))
