@@ -43,20 +43,23 @@ It will be ideal to create your local branch first.
   ```
   git checkout -b name
   ```
-Replace 'name' with you preference.\
+Replace 'name' with you preference.
+### Update pylibs as needed
 Update the pylibs when you need or when there are new features in master branch you would like to use
   ```
-  cd pylibs
-  git fetch
-  git pull origin master
-  cd ..
+  cd /path/to/repo_ua-cwb-project
+  git fetch --recurse_submodules
+  git submodule update --remote --merge
   git add pylibs
   git commit -m'messages'
   git push
   ```
-You can omit the last 4 steps if you don't want to push it back to your remote branch
-### 1. Add environment variables
-Add the full path of pylibs into PYTHONPATH
+You can omit the last 3 steps if you don't want to push it back to your remote branch
+
+### Make it accessible for python
+Add the full path of pylibs into PYTHONPATH in .bash_profile for BASH shell.
   ```
-  export PYTHONPATH=$PYTHONPATH:<full path of pylibs>
+  export PYTHONPATH=$PYTHONPATH:/path/to/pylibs
   ```
+Then it should be able to use all the functions I defined in pylibs
+
