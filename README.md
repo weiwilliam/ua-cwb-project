@@ -38,7 +38,7 @@ Following is the instruction to install python and create virtual environment ba
   conda activate name
   conda deactivate
   ```
-## Use the python script
+## Use the python scripts
 It will be ideal to create your local branch first.
   ```
   git checkout -b name
@@ -62,4 +62,6 @@ Add the full path of pylibs into PYTHONPATH in .bash_profile for BASH shell.
   export PYTHONPATH=$PYTHONPATH:/path/to/pylibs
   ```
 Then it should be able to use all the functions I defined in pylibs
+
+### Check comments in the script to learn how to run it.
 
