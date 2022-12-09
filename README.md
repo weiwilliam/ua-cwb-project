@@ -45,16 +45,24 @@ It will be ideal to create your local branch first.
   ```
 Replace 'name' with you preference.
 ### Update pylibs as needed
-Update the pylibs when you need or when there are new features in master branch you would like to use
+Update the pylibs when you need or when there are new features in master branch of pylibs you would like to use
   ```
   cd /path/to/repo_ua-cwb-project
-  git fetch --recurse_submodules
+  git fetch --recurse-submodules
   git submodule update --remote --merge
   git add pylibs
   git commit -m'messages'
   git push
   ```
 You can omit the last 3 steps if you don't want to push it back to your remote branch
+### Update whole repo with latest commit
+Updating your local master branch regularly is recommended.
+  ```
+  cd /path/to/repo_ua-cwb-project
+  git checkout master
+  git fetch --recurse-submodules
+  git pull --recurse-submodules
+  ```
 
 ### Make it accessible for python
 Add the full path of pylibs into PYTHONPATH in .bash_profile for BASH shell.
