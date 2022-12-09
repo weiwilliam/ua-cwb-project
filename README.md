@@ -69,6 +69,7 @@ Add the full path of pylibs into PYTHONPATH in .bash_profile for BASH shell.
   ```
   export PYTHONPATH=$PYTHONPATH:/path/to/pylibs
   ```
+Replace the "/path/to/pylibs" with your absolute path of pylibs under the repo. \
 Then it should be able to use all the functions I defined in pylibs after ```source .bash_profile```.
 
 ### Check comments in the script to learn how to run it.
