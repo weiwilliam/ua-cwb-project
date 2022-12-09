@@ -31,7 +31,7 @@ quality=300
 minussign=u'\u2212'
 
 # Setup the path of dmsdb and output sub-folder name
-rootdms='/nwpr/gfs/xa30/data/dmsdb'
+rootdms='/nwpr/gfs/xb173/data/dmsdb'
 savedir='debug'
 
 # Default folder is "images" in repo, modify it accordingly
@@ -47,7 +47,7 @@ expdms=['NAER','NAER']
 # Setup the jcap for lat/lon definition
 expjcap=[383,383]
 # Setup the label name using in figures
-exp_nm=['Ctrl','TestDG']
+exp_nm=['Ctrl','TestDG_12-9']
 
 dmstag='GIMG'
 if dmstag=='GIMG':
