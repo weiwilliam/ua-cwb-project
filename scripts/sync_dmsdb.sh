@@ -4,7 +4,7 @@
 #
 
 # Outisde dmsdb path
-mydmsdb=/nwpr/gfs/xa30/data/dmsdb
+mydmsdb=/nwpr/gfs/xb173/data/dmsdb
 # Target inside dmsdb path
 inside_dmsdb=/nwpr/gfs/xb173/data/dmsdb
 inside_ufsnm=TCo383L72
