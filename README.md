@@ -69,7 +69,7 @@ Add the full path of pylibs into PYTHONPATH in .bash_profile for BASH shell.
   ```
   export PYTHONPATH=$PYTHONPATH:/path/to/pylibs
   ```
-Then it should be able to use all the functions I defined in pylibs
+Then it should be able to use all the functions I defined in pylibs after ```source .bash_profile```.
 
 ### Check comments in the script to learn how to run it.
 
