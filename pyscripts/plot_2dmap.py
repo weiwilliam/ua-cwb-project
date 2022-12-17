@@ -41,40 +41,40 @@ if ( not os.path.exists(outputpath) ):
     os.makedirs(outputpath)
 
 # Setup the experiment .ufs folder
-expufs=['TCo383L72.ufs','TCo383L72DG.ufs']
+expufs=['TCo383L72.ufs','TCo383L72.ufs']
 # Setup the 4-digit tag of the DMS
-expdms=['NAER','NAER']
+expdms=['NAER','TEST']
 # Setup the jcap for lat/lon definition
 expjcap=[383,383]
 # Setup the label name using in figures
-exp_nm=['Ctrl','TestDG']
+exp_nm=['Ctrl','Test']
 
+# Setup the plotting variable, it will find the longname definition in pylibs
+pltvar='M60550'
 dmstag='GIMG'
 if dmstag=='GIMG':
-   keytag='GI0G'
-   grdtag='H1191936'
+    if 'M' == pltvar[0]:
+        keytag=dmstag
+    else:
+        keytag='GI0G'
+    grdtag='H1191936'
    
 sdate=2022050100
 edate=2022050100
 cycint=6
-fhmax=24
+fhmin=6
+fhmax=6
 fhint=6
 
-# Setup the plotting variable, it will find the longname definition in pylibs
-pltvar='S00310'
 cblb=find_dms_longname(pltvar)
+print('Plotting '+cblb)
 area='Glb'
 pltave=0 # 0: single cycle only; 1: time average
 tkfreq=1
 
-fhrlist=list(np.arange(0,fhmax+.1,fhint))
-if pltvar[:3]=='S00':
-   cnlvs=np.array((0,100,200,300,400,500,600,700,800,900,1000,1100))
+fhrlist=list(np.arange(fhmin,fhmax+.1,fhint))
    
 #cnlvs=np.array((0., 0.05, 0.1, 0.15, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5, 2.5))
-clridx=np.array((0,2,4,7,8,9,10,12,14,15,16,17,18))
-clrmap=setup_cmap('precip3_16lev',clridx)
-clrnorm = mpcrs.BoundaryNorm(cnlvs,len(clridx),extend='both')
 
 # Constant configuration
 proj=ccrs.PlateCarree()
@@ -140,6 +140,18 @@ for date in dlist:
 allds=allds.assign_coords({'exp':exp_nm,'fhr':fhrlist,'time':dlist})
 if area!='Glb':
    tmpds=allds.sel(lon=slice(minlon,maxlon),lat=slice(minlat,maxlat))
+
+if pltvar[:4]=='S003':
+    cnlvs=np.array((0,100,200,300,400,500,600,700,800,900,1000,1100))
+    clridx=np.array((0,2,4,7,8,9,10,12,14,15,16,17,18))
+else:
+    cnlvs=find_cnlvs(tmpds.pltvar.data,ntcks=17)
+    clridx=[0]
+    for idx in np.linspace(2,18,cnlvs.size):
+        clridx.append(int(idx))
+
+clrmap=setup_cmap('precip3_16lev',clridx)
+clrnorm = mpcrs.BoundaryNorm(cnlvs,len(clridx),extend='both')
 
 for date in dlist:
     for fhr in fhrlist:
