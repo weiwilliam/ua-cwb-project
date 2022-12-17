@@ -27,7 +27,7 @@ mpl.rc('xtick',labelsize=12)
 mpl.rc('ytick',labelsize=12)
 mpl.rc('legend',fontsize='large')
 axe_w=6; axe_h=4
-quality=320
+quality=300
 minussign=u'\u2212'
 
 # Setup the path of dmsdb and output sub-folder name
@@ -61,7 +61,7 @@ fhmax=24
 fhint=6
 
 # Setup the plotting variable, it will find the longname definition in pylibs
-pltvar='S00320'
+pltvar='S00300'
 cblb=find_dms_longname(pltvar)
 area='Glb'
 pltave=0 # 0: single cycle only; 1: time average
