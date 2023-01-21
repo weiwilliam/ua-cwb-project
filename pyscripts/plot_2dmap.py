@@ -43,14 +43,14 @@ if ( not os.path.exists(outputpath) ):
 # Setup the experiment .ufs folder
 expufs=['TCo383L72.ufs','TCo383L72.ufs']
 # Setup the 4-digit tag of the DMS
-expdms=['NAER','TEST']
+expdms=['NAER','QDBG']
 # Setup the jcap for lat/lon definition
 expjcap=[383,383]
 # Setup the label name using in figures
-exp_nm=['Ctrl','Test']
+exp_nm=['Ctrl','QDBG']
 
 # Setup the plotting variable, it will find the longname definition in pylibs
-pltvar='M60550'
+pltvar='S00100'
 dmstag='GIMG'
 if dmstag=='GIMG':
     if 'M' == pltvar[0]:
