@@ -47,10 +47,10 @@ expdms=['NAER','QDBG']
 # Setup the jcap for lat/lon definition
 expjcap=[383,383]
 # Setup the label name using in figures
-exp_nm=['Ctrl','QDBG']
+exp_nm=['NAER','QDBG']
 
 # Setup the plotting variable, it will find the longname definition in pylibs
-pltvar='S00100'
+pltvar='S00320'
 dmstag='GIMG'
 if dmstag=='GIMG':
     if 'M' == pltvar[0]:
@@ -62,7 +62,7 @@ if dmstag=='GIMG':
 sdate=2022050100
 edate=2022050100
 cycint=6
-fhmin=6
+fhmin=0
 fhmax=6
 fhint=6
 
@@ -141,14 +141,10 @@ allds=allds.assign_coords({'exp':exp_nm,'fhr':fhrlist,'time':dlist})
 if area!='Glb':
    tmpds=allds.sel(lon=slice(minlon,maxlon),lat=slice(minlat,maxlat))
 
-if pltvar[:4]=='S003':
-    cnlvs=np.array((0,100,200,300,400,500,600,700,800,900,1000,1100))
-    clridx=np.array((0,2,4,7,8,9,10,12,14,15,16,17,18))
-else:
-    cnlvs=find_cnlvs(tmpds.pltvar.data,ntcks=17)
-    clridx=[0]
-    for idx in np.linspace(2,18,cnlvs.size):
-        clridx.append(int(idx))
+cnlvs=find_cnlvs(tmpds.pltvar.data,ntcks=17)
+clridx=[0]
+for idx in np.linspace(2,18,cnlvs.size):
+    clridx.append(int(idx))
 
 clrmap=setup_cmap('precip3_16lev',clridx)
 clrnorm = mpcrs.BoundaryNorm(cnlvs,len(clridx),extend='both')
