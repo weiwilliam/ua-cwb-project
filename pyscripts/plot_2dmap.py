@@ -32,6 +32,7 @@ minussign=u'\u2212'
 
 # Setup the path of dmsdb and output sub-folder name
 rootdms='/nwpr/gfs/xb173/data/dmsdb'
+rootdms_swei='/nwpr/gfs/xa30/data/dmsdb'
 savedir='debug'
 
 # Default folder is "images" in repo, modify it accordingly
@@ -40,10 +41,12 @@ outputpath=imagesdir+'/images/2dmap/'+savedir
 if ( not os.path.exists(outputpath) ):
     os.makedirs(outputpath)
 
+# Setup the path for experiments
+inpath=['/nwpr/gfs/xa30/data/dmsdb','/nwpr/gfs/xb173/data/dmsdb']
 # Setup the experiment .ufs folder
 expufs=['TCo383L72.ufs','TCo383L72DG.ufs']
 # Setup the 4-digit tag of the DMS
-expdms=['NAER','NAER']
+expdms=['NAER','DBUG']
 # Setup the jcap for lat/lon definition
 expjcap=[383,383]
 # Setup the label name using in figures
@@ -57,19 +60,23 @@ if dmstag=='GIMG':
 sdate=2022050100
 edate=2022050100
 cycint=6
-fhmax=24
+fhmax=12
 fhint=6
 
 # Setup the plotting variable, it will find the longname definition in pylibs
-pltvar='S00300'
+#pltvar='S00320'
+pltvar='S00100'
 cblb=find_dms_longname(pltvar)
 area='Glb'
 pltave=0 # 0: single cycle only; 1: time average
 tkfreq=1
 
 fhrlist=list(np.arange(0,fhmax+.1,fhint))
-if pltvar[:3]=='S00':
-   cnlvs=np.array((0,100,200,300,400,500,600,700,800,900,1000,1100))
+#if pltvar[:3]=='S00':
+#cnlvs=np.array((0,100,200,300,400,500,600,700,800,900,1000,1100))-200
+#if pltvar[:4]=='S000':
+#cnlvs=np.array((0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1))
+cnlvs=np.array((230,240,250,260,270,280,290,300,310,320,330,340))
    
 #cnlvs=np.array((0., 0.05, 0.1, 0.15, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5, 2.5))
 clridx=np.array((0,2,4,7,8,9,10,12,14,15,16,17,18))
@@ -112,9 +119,9 @@ for date in dlist:
     yy=date[:4] ; mm=date[4:6] ; dd=date[6:8] ; hh=date[8:10]
     dtg=date[2:10]
 
-    for eidx,(ufsn,dmsn) in enumerate(zip(expufs,expdms)):
+    for eidx,(usrn,ufsn,dmsn) in enumerate(zip(inpath,expufs,expdms)):
         dtgdir=dmsn+dtg+dmstag
-        inputpath=os.path.join(rootdms,ufsn,dtgdir)
+        inputpath=os.path.join(usrn,ufsn,dtgdir)
         for fidx,fhr in enumerate(fhrlist):
             fhrdir='%s%.6i' %(date,fhr)
             keyfile='%s%s%s' %(pltvar,keytag,grdtag)

@@ -9,7 +9,7 @@ mydmsdb=/nwpr/gfs/xb173/data/dmsdb
 inside_dmsdb=/nwpr/gfs/xb173/data/dmsdb
 inside_ufsnm=TCo383L72
 outside_ufsnm=TCo383L72DG
-inside_dmsfd=NAER22050100GIMG
+inside_dmsfd=DBUG22050100GIMG
 
 if [ ! -d ${mydmsdb}/${outside_ufsnm}.ufs ]; then
    mkdir -p ${mydmsdb}/${outside_ufsnm}.ufs
