@@ -18,32 +18,31 @@ Following is the instruction to install python and create virtual environment ba
   See https://conda.io/projects/conda/en/latest/user-guide/install/linux.html#installing-on-linux for more information.
 ### 3. Clone this repo
   ```
-  git clone --recursive https://github.com/weiwilliam/ua-cwb-project.git name
+  git clone --recursive https://github.com/weiwilliam/ua-cwb-project.git <dirname>
   ```
   or 
   ```
-  git clone --recursive https://github.com/weiwilliam/ua-cwb-project.git name
-  cd name
+  git clone --recursive https://github.com/weiwilliam/ua-cwb-project.git <dirname>
+  cd <dirname>
   git submodule update --init --recursive
   ```
-  Replace 'name' with your preferred folder name
 ### 4. Create virtual environment
   Create a virtual environment through
   ```
-  conda env create -n name -f envs/swei_env.yaml
+  conda env create -n <envname> -f envs/swei_env.yaml
   ```
-  Replace 'name' with your preferred env name.
+  You can call your virtual environment by any name you prefer.
 ### 5. Activate/deactivate your virtual environment
   ```
-  conda activate name
+  conda activate <envname>
   conda deactivate
   ```
 ## Use the python scripts
-It will be ideal to create your local branch first.
+It will be ideal to create your local branch first based on master branch.
   ```
-  git checkout -b name
+  git checkout -b <branch_name>
   ```
-Replace 'name' with you preference.
+
 ### Update pylibs as needed
 Update the pylibs when you need or when there are new features in master branch of pylibs you would like to use
   ```
