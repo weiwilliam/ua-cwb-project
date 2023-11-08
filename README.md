@@ -6,14 +6,17 @@ Following is the instruction to install python and create virtual environment ba
   After log on h6dm23, check you have HTTPS_PROXY and HTTP_PROXY set up as below. \
   export HTTPS_PROXY=proxy-s1.cwb.gov.tw:8888 \
   export http_proxy=proxy-s1.cwb.gov.tw:8888 \
-  With these two environment variables, you can access the public domain outside of CWB firewall.
+  With these two environment variables, you can access the public domain outside of CWB firewall. \
+  **Note: as of Nov 8, 2023, it can't reach public domain through the proxy sever**
 ### 2. Download or Copy the conda install script
   Copy /nwpr/gfs/xa30/libs/Anaconda3-2022.05-Linux-x86_64.sh \
   or download (via wget) the latest anaconda or miniconda installing script at \
   https://www.anaconda.com/products/distribution#Downloads \
   It is https://repo.anaconda.com/archive/Anaconda3-2022.10-Linux-x86_64.sh as of Dec 7, 2022. \
-  For miniconda, check https://docs.conda.io/en/latest/miniconda.html and download the latest script via command below \
-  ```wget the https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh``` \
+  \
+  For miniconda, check https://docs.conda.io/en/latest/miniconda.html \
+  and download the latest script via command below \
+  ```wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh``` \
   Install conda by execute the shell script.
   See https://conda.io/projects/conda/en/latest/user-guide/install/linux.html#installing-on-linux for more information.
 ### 3. Clone this repo
@@ -32,6 +35,8 @@ Following is the instruction to install python and create virtual environment ba
   conda env create -n <envname> -f envs/swei_env.yaml
   ```
   You can call your virtual environment by any name you prefer.
+  It will create the environment based on my installed package.
+  
 ### 5. Activate/deactivate your virtual environment
   ```
   conda activate <envname>
