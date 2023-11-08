@@ -32,7 +32,7 @@ minussign=u'\u2212'
 
 # Setup the path of dmsdb and output sub-folder name
 rootdms='/nwpr/gfs/xa30/data/dmsdb'
-savedir='debug'
+savedir='93a821af'
 
 # Default folder is "images" in repo, modify it accordingly
 imagesdir=str((Path(__file__).parent/'..').resolve())
@@ -43,14 +43,14 @@ if ( not os.path.exists(outputpath) ):
 # Setup the experiment .ufs folder
 expufs=['TCo383L72.ufs','TCo383L72.ufs']
 # Setup the 4-digit tag of the DMS
-expdms=['NAER','TEST']
+expdms=['STOC','EFFR']
 # Setup the jcap for lat/lon definition
 expjcap=[383,383]
 # Setup the label name using in figures
-exp_nm=['Ctrl','Test']
+exp_nm=['TCo','UFSRad-1']
 
 # Setup the plotting variable, it will find the longname definition in pylibs
-pltvar='M60550'
+pltvar='S00100'
 dmstag='GIMG'
 if dmstag=='GIMG':
     if 'M' == pltvar[0]:
@@ -59,18 +59,19 @@ if dmstag=='GIMG':
         keytag='GI0G'
     grdtag='H1191936'
    
-sdate=2022050100
-edate=2022050100
+sdate=2022080100
+edate=2022080100
 cycint=6
-fhmin=6
-fhmax=6
+fhmin=0
+fhmax=120
 fhint=6
 
 cblb=find_dms_longname(pltvar)
 print('Plotting '+cblb)
 area='Glb'
 pltave=0 # 0: single cycle only; 1: time average
-tkfreq=1
+pltfhrave=1 # 0: separate fhr only; 1: average over fhr
+tkfreq=2
 
 fhrlist=list(np.arange(fhmin,fhmax+.1,fhint))
    
@@ -141,14 +142,10 @@ allds=allds.assign_coords({'exp':exp_nm,'fhr':fhrlist,'time':dlist})
 if area!='Glb':
    tmpds=allds.sel(lon=slice(minlon,maxlon),lat=slice(minlat,maxlat))
 
-if pltvar[:4]=='S003':
-    cnlvs=np.array((0,100,200,300,400,500,600,700,800,900,1000,1100))
-    clridx=np.array((0,2,4,7,8,9,10,12,14,15,16,17,18))
-else:
-    cnlvs=find_cnlvs(tmpds.pltvar.data,ntcks=17)
-    clridx=[0]
-    for idx in np.linspace(2,18,cnlvs.size):
-        clridx.append(int(idx))
+cnlvs=find_cnlvs(tmpds.pltvar.data,ntcks=17)
+clridx=[0]
+for idx in np.linspace(2,18,cnlvs.size):
+    clridx.append(int(idx))
 
 clrmap=setup_cmap('precip3_16lev',clridx)
 clrnorm = mpcrs.BoundaryNorm(cnlvs,len(clridx),extend='both')
@@ -191,7 +188,7 @@ for date in dlist:
         set_size(axe_w,axe_h,b=0.13,l=0.1,r=0.95,t=0.95)
         cn=ax.contourf(plttmp.lon,plttmp.lat,plttmp.pltvar.data,levels=difflvs,norm=diffnorm,cmap=diffcmap,extend='both')
         ax.set_title(tistr,loc='left')
-        plt.colorbar(cn,ax=ax,orientation='horizontal',ticks=difflvs[::2],
+        plt.colorbar(cn,ax=ax,orientation='horizontal',ticks=difflvs[::tkfreq],
                      fraction=0.045,aspect=40,pad=0.08,label=cblb)
         if (area=='NAmer'):
            ax.add_feature(cft.STATES,zorder=2)
@@ -199,26 +196,27 @@ for date in dlist:
         fig.savefig(outname,dpi=quality)
         plt.close()
 #
-#    if (pltave):
-#       if (dates_count==0):
-#          var=tmpvar
-#       else:
-#          var=xa.concat((var,tmpvar),dim='time')
-#
-#       if (date==str(edate)):
-#          outname='%s/%s_%s.mean.%s_%s.png' %(outputpath,area,pltvar,sdate,edate)
-#          title_str='%s-%s'%(sdate,edate)
-#
-#          pltdata=var.mean(dim='time')
-#          fig,ax,gl=setupax_2dmap(cornerll,area,proj,lbsize=txsize)
-#          set_size(axe_w,axe_h,b=0.13,l=0.05,r=0.95,t=0.95)
-#          cn=ax.contourf(pltdata.lon,pltdata.lat,pltdata,levels=cnlvs,cmap=clrmap,norm=aer_norm,extend='both')
-#          ax.set_title(title_str,loc='left')
-#          plt.colorbar(cn,ax=ax,orientation='horizontal',ticks=cnlvs[::tkfreq],
-#                       fraction=0.045,aspect=40,pad=0.08,label=cblb)
-#          if (area=='NAmer'):
-#             ax.add_feature(cft.STATES,zorder=2)
-#          print(outname)
-#          fig.savefig(outname,dpi=quality)
-#          plt.close()
+    if (pltfhrave):
+        plttmp=diff.sel(time=date).mean(dim='fhr')
+        tistr='%s%s%s %s fhr ave.' %(exp_nm[1],minussign,exp_nm[0],date) 
+        outname='%s/DiffAve_%s-%s_%s.%s.png' %(outputpath,exp_nm[1],exp_nm[0],pltvar,date)
+
+        tmplvs=find_cnlvs(plttmp.pltvar.data,ntcks=21,eqside=1)
+        clridx=[]
+        for idx in np.linspace(2,254,tmplvs.size):
+            clridx.append(int(idx))
+        tmpcmap=setup_cmap('BlueYellowRed',clridx)
+        tmpnorm = mpcrs.BoundaryNorm(tmplvs,len(clridx)+1,extend='both')
+
+        fig,ax,gl=setupax_2dmap(cornerll,area,proj,lbsize=txsize)
+        set_size(axe_w,axe_h,b=0.13,l=0.05,r=0.95,t=0.95)
+        cn=ax.contourf(plttmp.lon,plttmp.lat,plttmp.pltvar.data,levels=tmplvs,cmap=tmpcmap,norm=tmpnorm,extend='both')
+        ax.set_title(tistr,loc='left')
+        plt.colorbar(cn,ax=ax,orientation='horizontal',ticks=tmplvs[::tkfreq],
+                     fraction=0.045,aspect=40,pad=0.08,label=cblb)
+        if (area=='NAmer'):
+           ax.add_feature(cft.STATES,zorder=2)
+        print(outname)
+        fig.savefig(outname,dpi=quality)
+        plt.close()
  
