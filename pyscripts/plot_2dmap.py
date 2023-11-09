@@ -14,7 +14,7 @@ import matplotlib.colors as mpcrs
 import cartopy.crs as ccrs
 import cartopy.feature as cft
 
-from utils import setup_cmap, ndate, find_cnlvs
+from utils import setup_cmap, get_dates, find_cnlvs
 from plot_utils import setupax_2dmap,set_size
 from TCo_latlon_def import define_latlon
 from lib_dms import read_dms, find_dms_longname
@@ -32,7 +32,7 @@ minussign=u'\u2212'
 
 # Setup the path of dmsdb and output sub-folder name
 rootdms='/nwpr/gfs/xa30/data/dmsdb'
-savedir='93a821af'
+savedir='ualb_oldnew_fix'
 
 # Default folder is "images" in repo, modify it accordingly
 imagesdir=str((Path(__file__).parent/'..').resolve())
@@ -43,11 +43,11 @@ if ( not os.path.exists(outputpath) ):
 # Setup the experiment .ufs folder
 expufs=['TCo383L72.ufs','TCo383L72.ufs']
 # Setup the 4-digit tag of the DMS
-expdms=['STOC','EFFR']
+expdms=['ALB1','ALB2']
 # Setup the jcap for lat/lon definition
 expjcap=[383,383]
 # Setup the label name using in figures
-exp_nm=['TCo','UFSRad-1']
+exp_nm=['OldFix','NewFix']
 
 # Setup the plotting variable, it will find the longname definition in pylibs
 pltvar='S00100'
@@ -59,8 +59,8 @@ if dmstag=='GIMG':
         keytag='GI0G'
     grdtag='H1191936'
    
-sdate=2022080100
-edate=2022080100
+sdate=2022110100
+edate=2022110100
 cycint=6
 fhmin=0
 fhmax=120
@@ -91,33 +91,26 @@ else:
    maxlon=(maxlon+180)%360-180
 cornerll=[minlat,maxlat,minlon,maxlon]
 
-date1=pd.to_datetime(sdate,format="%Y%m%d%H")
-date2=pd.to_datetime(edate,format="%Y%m%d%H")
-delta = timedelta(hours=cycint)
-dates = pd.date_range(start=date1, end=date2, freq=delta)
+dates = get_dates(sdate,edate,cycint)
 
 # Define lat/lon of the Gaussian grid based on jcap number
 lat,lon=define_latlon(jcap=383)
 lon=(lon+180)%360-180
 
-tnum=0
-dlist=[]
-cdate=sdate
-while (cdate<=edate):
-    dlist.append(str(cdate))
-    tnum=tnum+1
-    cdate=ndate(cycint,cdate)
-
 dates_count=0
-for date in dlist:
-    yy=date[:4] ; mm=date[4:6] ; dd=date[6:8] ; hh=date[8:10]
-    dtg=date[2:10]
+for cdate in dates:
+    yy=cdate.strftime('%Y')
+    mm=cdate.strftime('%m')
+    dd=cdate.strftime('%d')
+    hh=cdate.strftime('%H')
+    dtg=cdate.strftime('%y%m%d%H')
+    cdt=cdate.strftime('%Y%m%d%H')
 
     for eidx,(ufsn,dmsn) in enumerate(zip(expufs,expdms)):
         dtgdir=dmsn+dtg+dmstag
         inputpath=os.path.join(rootdms,ufsn,dtgdir)
         for fidx,fhr in enumerate(fhrlist):
-            fhrdir='%s%.6i' %(date,fhr)
+            fhrdir='%s%.6i' %(cdt,fhr)
             keyfile='%s%s%s' %(pltvar,keytag,grdtag)
             indmskey=os.path.join(inputpath,fhrdir,keyfile)
             print('Processing on: '+indmskey, flush=1)
@@ -138,7 +131,7 @@ for date in dlist:
        allds=xa.concat((allds,expds),dim='time')
     dates_count+=1
 
-allds=allds.assign_coords({'exp':exp_nm,'fhr':fhrlist,'time':dlist})
+allds=allds.assign_coords({'exp':exp_nm,'fhr':fhrlist,'time':dates})
 if area!='Glb':
    tmpds=allds.sel(lon=slice(minlon,maxlon),lat=slice(minlat,maxlat))
 
@@ -150,13 +143,14 @@ for idx in np.linspace(2,18,cnlvs.size):
 clrmap=setup_cmap('precip3_16lev',clridx)
 clrnorm = mpcrs.BoundaryNorm(cnlvs,len(clridx),extend='both')
 
-for date in dlist:
+for cdate in dates:
+    cdt=cdate.strftime('%Y%m%d%H')
     for fhr in fhrlist:
-        pltdata=allds.sel(time=date,fhr=fhr)
+        pltdata=allds.sel(time=cdate,fhr=fhr)
         for explb in exp_nm:
             plttmp=pltdata.sel(exp=explb)
-            tistr='%s %s_f%.3i' %(explb,date,fhr) 
-            outname='%s/%s_%s.%s_f%.3i.png' %(outputpath,explb,pltvar,date,fhr)
+            tistr='%s %s_f%.3i' %(explb,cdt,fhr) 
+            outname='%s/%s_%s.%s_f%.3i.png' %(outputpath,explb,pltvar,cdt,fhr)
 
             fig,ax,gl=setupax_2dmap(cornerll,area,proj,lbsize=txsize)
             set_size(axe_w,axe_h,b=0.13,l=0.1,r=0.95,t=0.95)
@@ -178,11 +172,12 @@ for idx in np.linspace(2,254,difflvs.size):
 diffcmap=setup_cmap('BlueYellowRed',clridx)
 diffnorm = mpcrs.BoundaryNorm(difflvs,len(clridx)+1,extend='both')
 
-for date in dlist:
+for cdate in dates:
+    cdt=cdate.strftime('%Y%m%d%H')
     for fhr in fhrlist:
-        plttmp=diff.sel(time=date,fhr=fhr)
-        tistr='%s%s%s %s_f%.3i' %(exp_nm[1],minussign,exp_nm[0],date,fhr) 
-        outname='%s/Diff_%s-%s_%s.%s_f%.3i.png' %(outputpath,exp_nm[1],exp_nm[0],pltvar,date,fhr)
+        plttmp=diff.sel(time=cdate,fhr=fhr)
+        tistr='%s%s%s %s_f%.3i' %(exp_nm[1],minussign,exp_nm[0],cdt,fhr) 
+        outname='%s/Diff_%s-%s_%s.%s_f%.3i.png' %(outputpath,exp_nm[1],exp_nm[0],pltvar,cdt,fhr)
 
         fig,ax,gl=setupax_2dmap(cornerll,area,proj,lbsize=txsize)
         set_size(axe_w,axe_h,b=0.13,l=0.1,r=0.95,t=0.95)
@@ -197,9 +192,9 @@ for date in dlist:
         plt.close()
 #
     if (pltfhrave):
-        plttmp=diff.sel(time=date).mean(dim='fhr')
-        tistr='%s%s%s %s fhr ave.' %(exp_nm[1],minussign,exp_nm[0],date) 
-        outname='%s/DiffAve_%s-%s_%s.%s.png' %(outputpath,exp_nm[1],exp_nm[0],pltvar,date)
+        plttmp=diff.sel(time=cdate).mean(dim='fhr')
+        tistr='%s%s%s %s fhr ave.' %(exp_nm[1],minussign,exp_nm[0],cdt) 
+        outname='%s/DiffAve_%s-%s_%s.%s.png' %(outputpath,exp_nm[1],exp_nm[0],pltvar,cdt)
 
         tmplvs=find_cnlvs(plttmp.pltvar.data,ntcks=21,eqside=1)
         clridx=[]
