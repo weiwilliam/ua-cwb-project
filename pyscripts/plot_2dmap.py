@@ -32,7 +32,7 @@ minussign=u'\u2212'
 
 # Setup the path of dmsdb and output sub-folder name
 rootdms='/nwpr/gfs/xa30/data/dmsdb'
-savedir='93a821af'
+savedir='ualb_oldnew_fix'
 
 # Default folder is "images" in repo, modify it accordingly
 imagesdir=str((Path(__file__).parent/'..').resolve())
@@ -43,11 +43,11 @@ if ( not os.path.exists(outputpath) ):
 # Setup the experiment .ufs folder
 expufs=['TCo383L72.ufs','TCo383L72.ufs']
 # Setup the 4-digit tag of the DMS
-expdms=['STOC','EFFR']
+expdms=['ALB1','ALB2']
 # Setup the jcap for lat/lon definition
 expjcap=[383,383]
 # Setup the label name using in figures
-exp_nm=['TCo','UFSRad-1']
+exp_nm=['OldFix','NewFix']
 
 # Setup the plotting variable, it will find the longname definition in pylibs
 pltvar='S00100'

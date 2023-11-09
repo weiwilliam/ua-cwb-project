@@ -6,10 +6,11 @@
 # Outisde dmsdb path
 mydmsdb=/nwpr/gfs/xa30/data/dmsdb
 # Target inside dmsdb path
-inside_dmsdb=/nwpr/gfs/xa30/data/dmsdb
+inside_dmsdb=/nwpr/gfs/xb156/data/dmsdb
 inside_ufsnm=TCo383L72
 outside_ufsnm=TCo383L72
-inside_dmsfd=EFFR22080100GIMG
+inside_dmsfd=ALB222110100GIMG
+#inside_dmsfd=EFFR22080100GIMG
 
 if [ ! -d ${mydmsdb}/${outside_ufsnm}.ufs ]; then
    mkdir -p ${mydmsdb}/${outside_ufsnm}.ufs
