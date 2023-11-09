@@ -32,7 +32,7 @@ Following is the instruction to install python and create virtual environment ba
 ### 4. Create virtual environment
   Create a virtual environment through
   ```
-  conda env create -n <envname> -f envs/swei_env.yaml
+  conda create -n <envname> -f envs/swei_env.yaml
   ```
   You can call your virtual environment by any name you prefer.
   It will create the environment based on my installed package.
