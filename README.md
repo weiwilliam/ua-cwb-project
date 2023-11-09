@@ -32,7 +32,7 @@ Following is the instruction to install python and create virtual environment ba
 ### 4. Create virtual environment
   Create a virtual environment through
   ```
-  conda env create -n <envname> -f envs/swei_env.yaml
+  conda create -n <envname> -f envs/swei_env.yaml
   ```
   You can call your virtual environment by any name you prefer.
   It will create the environment based on my installed package.
@@ -76,5 +76,20 @@ Add the full path of pylibs into PYTHONPATH in .bash_profile for BASH shell.
 Replace the "/path/to/pylibs" with your absolute path of pylibs under the repo. \
 Then it should be able to use all the functions I defined in pylibs after ```source .bash_profile```.
 
+### Sync the dmsdb from inside HPC to outside HPC
+Modify the paths in scripts/sync_dmsdb.sh to your environment
+```
+mydmsdb=/nwpr/gfs/xa30/data/dmsdb
+# Target inside dmsdb path
+inside_dmsdb=/nwpr/gfs/xa30/data/dmsdb
+inside_ufsnm=TCo383L72
+outside_ufsnm=TCo383L72
+inside_dmsfd=EFFR22080100GIMG
+```
+Run it to copy it to outside HPC for plotting.
+
 ### Check comments in the script to learn how to run it.
+Check pyscripts/plot_2dmap.py \
+Changes to these lines may be needed \
+https://github.com/weiwilliam/ua-cwb-project/blob/1f5ce19e160e711f528d5621b87b551007a0ec05/pyscripts/plot_2dmap.py#L34-L67
 
