@@ -1,3 +1,7 @@
+# Apr 22, 2024
+FV3 ATM at [GFS v16](https://github.com/NOAA-EMC/fv3atm/tree/production/GFS.v16) was checked out on FX1000.
+
+# Apr 3, 2024
 Please go to outside HPC and find my cloned ufs-weather-model repository at
 `/nwpr/gfs/xa30/Git/ufs-weather-model`
 
